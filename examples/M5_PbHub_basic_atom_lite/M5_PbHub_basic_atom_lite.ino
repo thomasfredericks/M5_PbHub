@@ -52,14 +52,5 @@ void loop() {
     valeur = myPbHub.analogRead(3);
     Serial.println(valeur);
 
-    /*
-    // Chaque canal peut faire une lecture analogique de la broche I
-    // canal : numéro de canal entre 0 et 5
-    int valeur = myPbHub.analogRead( canal );
-    
-    // Chaque canal peut faire une lecture numérique de la broche I ou O
-    int valeur = myPbHub.digitalRead( canal, broche );
-
-    */
   }
 }
