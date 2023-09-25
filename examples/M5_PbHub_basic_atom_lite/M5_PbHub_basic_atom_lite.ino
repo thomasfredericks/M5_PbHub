@@ -46,6 +46,7 @@ void loop() {
     Serial.println(valeur);
 
     myPbHub.setPixelColor(4, 0, valeur * 255, valeur * 255, valeur * 255);
+    myPbHub.digitalWrite(1,valeur);
 
 
     Serial.print("ANGLE UNIT ");
