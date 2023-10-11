@@ -35,19 +35,32 @@ myPbHub.setPixelCount( uint8_t channel ,  uint16_t count );
 | `myPbHub.fillPixelColor(uint8_t channel, uint16_t start, uint16_t index, uint8_t r,int8_t g, uint8_t b)` | Starting from the index, sets a certain count of pixels to the same r,g,b color on the indicated channel |
 
 Gets the digital value (0 or 1) of the *I* pin for the indicated channel :
-`int value = myPbHub.digitalRead(uint8_t channel)`
+```arduino
+int value = myPbHub.digitalRead(uint8_t channel)
+```
 
 Writes a digital value (0 or 1) to the *O* pin for the indicated channel :
-`myPbHub.digitalWrite(uint8_t channel, uint8_t  value)` 
+```arduino
+myPbHub.digitalWrite(uint8_t channel, uint8_t  value)
+```
 
 Gets the analog value of the *I* pin for the indicated channel :
-`int value = myPbHub.analogRead(uint8_t channel)`
+```arduino
+int value = myPbHub.analogRead(uint8_t channel)
+```
 
 Sets the PWM of to the *O* pin for the indicated channel :
-`myPbHub.analogWrite(uint8_t channel, uint8_t pin, uint8_t  pwm)`
+```arduino
+myPbHub.analogWrite(uint8_t channel, uint8_t pin, uint8_t  pwm)
+```
+
 
 Sets the r,g,b color of the pixel specified at that index for the indicated channel :
-`myPbHub.setPixelColor(uint8_t channel, uint16_t index, uint8_t r,int8_t g, uint8_t b)` 
+```arduino
+myPbHub.setPixelColor(uint8_t channel, uint16_t index, uint8_t r,int8_t g, uint8_t b)
+```
 
 Starting from the index, sets a certain count of pixels to the same r,g,b color on the indicated channel : 
-`myPbHub.fillPixelColor(uint8_t channel, uint16_t start, uint16_t index, uint8_t r,int8_t g, uint8_t b)`
+```arduino
+myPbHub.fillPixelColor(uint8_t channel, uint16_t start, uint16_t index, uint8_t r,int8_t g, uint8_t b)
+```
