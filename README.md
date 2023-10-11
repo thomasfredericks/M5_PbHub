@@ -4,7 +4,7 @@ Simple library for the (M5Stack PbHUB v1.1)[https://docs.m5stack.com/en/unit/pbh
 
 ![PbHub back](pbhub_back.jpg)
 
-![PbHub connected to KEY, LIGHT, PIR and ANGLE units](pbhub_back.jpg)
+![PbHub connected to KEY, LIGHT, PIR and ANGLE units](pbhub_connected.jpg)
 
 ## Usage
 
