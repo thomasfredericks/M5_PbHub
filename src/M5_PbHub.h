@@ -11,7 +11,7 @@ class M5_PbHub {
   private:
     uint8_t _iic_addr = 0x61;
 
-    uint8_t _digitalRead(uint8_t channel, uint8_t pin) {
+    int _digitalRead(uint8_t channel, uint8_t pin) {
         Wire.beginTransmission(_iic_addr);
         Wire.write(((channel+4)<<4) | (0x04+pin));
         Wire.endTransmission();
@@ -46,7 +46,7 @@ void begin() {
     Wire.begin();
 }
 
-uint8_t digitalRead(uint8_t channel) {
+int digitalRead(uint8_t channel) {
     return _digitalRead(channel,0);
 }
 
@@ -54,7 +54,7 @@ void digitalWrite(uint8_t channel, uint8_t  value) {
      _digitalWrite(channel,1,value);
 }
 
-uint16_t analogRead(uint8_t channel) {
+int analogRead(uint8_t channel) {
     Wire.beginTransmission(_iic_addr);
     Wire.write( ((channel+4)<<4) | 0x06);
     Wire.endTransmission();
@@ -75,10 +75,10 @@ uint16_t analogRead(uint8_t channel) {
 
 
 
-void analogWrite(uint8_t channel, uint8_t pin, uint8_t  duty) {
+void analogWrite(uint8_t channel, uint8_t pin, uint8_t  pwm) {
     Wire.beginTransmission(_iic_addr);
     Wire.write(((channel+4)<<4) | (0x02+pin));
-    Wire.write(duty);
+    Wire.write(pwm);
     Wire.endTransmission();
 }
 
@@ -103,12 +103,12 @@ void setPixelColor(uint8_t channel, uint16_t index, uint8_t r,
     Wire.endTransmission();
 }
 
-void fillPixelColor(uint8_t channel, uint16_t first, uint16_t count,
+void fillPixelColor(uint8_t channel, uint16_t index, uint16_t count,
                                   uint8_t r, int8_t g, uint8_t b) {
     Wire.beginTransmission(_iic_addr);
     Wire.write(((channel+4)<<4) | 0x0a);
-    Wire.write(first & 0xff);
-    Wire.write(first >> 8);
+    Wire.write(index & 0xff);
+    Wire.write(index >> 8);
 
     Wire.write(count & 0xff);
     Wire.write(count >> 8);

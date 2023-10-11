@@ -35,7 +35,7 @@ void setup() {
 }
 
 void loop() {
-  // Toujours inclure M5.update() au début de loop() :
+  // TOUJOURS inclure M5.update() au début de loop() :
   M5.update();
 
   if (millis() - monChronoDepart >= 50) {  // SI LE TEMPS ÉCOULÉ DÉPASSE 50 MS...
@@ -47,7 +47,6 @@ void loop() {
 
     myPbHub.setPixelColor(4, 0, valeur * 255, valeur * 255, valeur * 255);
     myPbHub.digitalWrite(1,valeur);
-
 
     Serial.print("ANGLE UNIT ");
     valeur = myPbHub.analogRead(3);
