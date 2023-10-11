@@ -17,6 +17,11 @@ CRGB mesPixels[1];
 #include <M5_PbHub.h>
 M5_PbHub myPbHub;
 
+#define KEY_UNIT_CHANNEL 4
+#define ANGLE_UNIT_CHANNEL 3
+#define PIR_UNIT_CHANNEL 2
+#define LIGHT_UNIT_CHANNEL 1
+
 unsigned long monChronoDepart = 0;
 
 void setup() {
@@ -31,7 +36,7 @@ void setup() {
 
   myPbHub.begin();
 
-  myPbHub.setPixelCount(4, 1);
+  myPbHub.setPixelCount(KEY_UNIT_CHANNEL, 1);
 }
 
 void loop() {
@@ -40,17 +45,26 @@ void loop() {
 
   if (millis() - monChronoDepart >= 50) {  // SI LE TEMPS ÉCOULÉ DÉPASSE 50 MS...
     monChronoDepart = millis();            // ...REDÉMARRER LE CHRONOMÈTRE...
-    Serial.print("KEY UNIT ");
-    int valeur = myPbHub.digitalRead(4);
 
-    Serial.println(valeur);
+    Serial.print("KEY: ");
+    int maValeurKey = myPbHub.digitalRead(KEY_UNIT_CHANNEL);
+    Serial.print(maValeurKey);
 
-    myPbHub.setPixelColor(4, 0, valeur * 255, valeur * 255, valeur * 255);
-    myPbHub.digitalWrite(1,valeur);
+    // Allumer le pixel du KEY si son bouton est appuyé
+    myPbHub.setPixelColor(KEY_UNIT_CHANNEL, 0, maValeurKey * 255, maValeurKey * 255, maValeurKey * 255);
 
-    Serial.print("ANGLE UNIT ");
-    valeur = myPbHub.analogRead(3);
-    Serial.println(valeur);
+    Serial.print(" ANGLE: ");
+    int maValeurAngle = myPbHub.analogRead(ANGLE_UNIT_CHANNEL);
+    Serial.print(maValeurAngle);
+
+    Serial.print(" PIR: ");
+    int maValeurPir = myPbHub.analogRead(PIR_UNIT_CHANNEL);
+    Serial.print(maValeurPir);
+
+    Serial.print(" LIGHT: ");
+    int maValeurLight = myPbHub.analogRead(LIGHT_UNIT_CHANNEL);
+    Serial.print(maValeurLight);
+    Serial.println();
 
   }
 }
