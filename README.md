@@ -2,6 +2,10 @@
 
 Simple library for the (M5Stack PbHUB v1.1)[https://docs.m5stack.com/en/unit/pbhub_1.1].
 
+![PbHub back](pbhub_back.jpg)
+
+![PbHub connected to KEY, LIGHT, PIR and ANGLE units](pbhub_back.jpg)
+
 ## Usage
 
 ### Code to add to global space (i.e. before `setup()` )
