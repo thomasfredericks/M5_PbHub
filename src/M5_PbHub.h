@@ -43,7 +43,8 @@ M5_PbHub(uint8_t iic_addr) {
 }
 
 void begin() {
-    Wire.begin();
+    // Wire should be started before
+    // Wire.begin();
 }
 
 int digitalRead(uint8_t channel) {

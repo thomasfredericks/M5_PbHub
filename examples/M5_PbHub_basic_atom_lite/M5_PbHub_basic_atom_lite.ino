@@ -1,50 +1,46 @@
 
 
-// Inclure la librairie M5 (version pour M5Atom) :
-// https://github.com/m5stack/M5Atom
-#include <M5Atom.h>
-
-// Inclure la librairie FastLED qui va gérer le pixel :
-// https://github.com/FastLED/FastLED
-#include <FastLED.h>
-
-// Un tableau qui contient une variable de type CRGB.
-// Il y a un seul pixel, mais il doit être dans un tableau.
-// CRGB est un type de couleur défini par la lirairie FastLed :
-// https://github.com/FastLED/FastLED/wiki/Pixel-reference#crgb-reference
-CRGB mesPixels[1];
+// Le code de base pour le M5Stack Atom
+#include <M5Atom.h> // Inclure la librairie M5 (version pour M5Atom) https://github.com/m5stack/M5Atom
+CRGB pixel; // CRGB est défini par FastLed https://github.com/FastLED/FastLED/wiki/Pixel-reference#crgb-reference
+unsigned long monChronoMessages; // Utilisé dans loop() plus bas pour limiter la vitesse d'envoi des messages
 
 #include <M5_PbHub.h>
 M5_PbHub myPbHub;
 
-#define KEY_UNIT_CHANNEL 4
-#define ANGLE_UNIT_CHANNEL 3
-#define PIR_UNIT_CHANNEL 2
+#define ANGLE_UNIT_CHANNEL 0
 #define LIGHT_UNIT_CHANNEL 1
-
-unsigned long monChronoDepart = 0;
+#define MOTION_UNIT_CHANNEL 2
+#define KEY_UNIT_CHANNEL 3
 
 void setup() {
-  // Démarrer la libraire M5 avec toutes les options de pré-configuration désactivées :
-  M5.begin(false, false, false);
+  M5.begin(false, false, false); // Démarrer la libraire M5 avec toutes les options désactivées
+  Serial.begin(115200); // Démarrer la connexion sérielle avec l'ordinateur
+  FastLED.addLeds<WS2812, DATA_PIN, GRB>(&pixel, 1); // Ajouter le pixel du M5Atom à FastLED
 
-  // Démarrer la connexion sérielle :
-  Serial.begin(115200);
+  // Animation de démarrage
+  while ( millis() < 5000) {
+    // Allumer le pixel et attendre 100 millisecondes
+    pixel = CRGB(255,255,255);
+    FastLED.show();
+    delay(100);
+    // Éteindre le pixel et attendre 100 millisecondes
+    pixel = CRGB(0,0,0);
+    FastLED.show();
+    delay(100);
+  } 
 
-  // Ajouter le pixel (il y en a un seul) du M5Atom à la librairie FastLED :
-  FastLED.addLeds<WS2812, DATA_PIN, GRB>(mesPixels, 1);
-
+  // Démarrer la connexion Wire utilisée par M5_PbHub:
+  Wire.begin();
   myPbHub.begin();
-
+  // Initialiser le pixel du Key Unit
   myPbHub.setPixelCount(KEY_UNIT_CHANNEL, 1);
 }
 
 void loop() {
-  // TOUJOURS inclure M5.update() au début de loop() :
-  M5.update();
-
-  if (millis() - monChronoDepart >= 50) {  // SI LE TEMPS ÉCOULÉ DÉPASSE 50 MS...
-    monChronoDepart = millis();            // ...REDÉMARRER LE CHRONOMÈTRE...
+   M5.update();  // Toujours inclure M5.update() au début de loop()
+  if ( millis() - monChronoMessages >= 50 ) { // Si 50 millisecondes se sont écoulées
+    monChronoMessages = millis(); // Repartir le compteur
 
     Serial.print("KEY: ");
     int maValeurKey = myPbHub.digitalRead(KEY_UNIT_CHANNEL);
@@ -57,14 +53,14 @@ void loop() {
     int maValeurAngle = myPbHub.analogRead(ANGLE_UNIT_CHANNEL);
     Serial.print(maValeurAngle);
 
-    Serial.print(" PIR: ");
-    int maValeurPir = myPbHub.analogRead(PIR_UNIT_CHANNEL);
-    Serial.print(maValeurPir);
+    Serial.print(" MOTION: ");
+    int maValeurMotion = myPbHub.digitalRead(MOTION_UNIT_CHANNEL);
+    Serial.print(maValeurMotion);
 
     Serial.print(" LIGHT: ");
     int maValeurLight = myPbHub.analogRead(LIGHT_UNIT_CHANNEL);
     Serial.print(maValeurLight);
     Serial.println();
-
   }
+
 }
