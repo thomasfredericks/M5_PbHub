@@ -11,26 +11,7 @@ class M5_PbHub {
   private:
     uint8_t _iic_addr = 0x61;
 
-    int _digitalRead(uint8_t channel, uint8_t pin) {
-        Wire.beginTransmission(_iic_addr);
-        Wire.write(((channel+4)<<4) | (0x04+pin));
-        Wire.endTransmission();
 
-        uint8_t RegValue = 0;
-
-        Wire.requestFrom(_iic_addr, (uint8_t)1);
-        while (Wire.available()) {
-            RegValue = Wire.read();
-        }
-        return RegValue;
-    }
-
-    void _digitalWrite(uint8_t channel, uint8_t pin, uint8_t value) {
-        Wire.beginTransmission(_iic_addr);
-        Wire.write(((channel+4)<<4) | (0x00+pin));
-        Wire.write(value);
-        Wire.endTransmission();
-    }
 
 
 
@@ -47,15 +28,41 @@ void begin() {
     // Wire.begin();
 }
 
+int digitalRead(uint8_t channel, uint8_t pin) {
+	if (channel == 5) channel++;
+	Wire.beginTransmission(_iic_addr);
+	Wire.write(((channel+4)<<4) | (0x04+pin));
+	Wire.endTransmission();
+
+	uint8_t RegValue = 0;
+
+	Wire.requestFrom(_iic_addr, (uint8_t)1);
+	while (Wire.available()) {
+		RegValue = Wire.read();
+	}
+	return RegValue;
+}
+
+void digitalWrite(uint8_t channel, uint8_t pin, uint8_t value) {
+	if (channel == 5) channel++;
+	Wire.beginTransmission(_iic_addr);
+	Wire.write(((channel+4)<<4) | (0x00+pin));
+	Wire.write(value);
+	Wire.endTransmission();
+}
+
 int digitalRead(uint8_t channel) {
-    return _digitalRead(channel,0);
+	// CHANNEL 5 OFFSET BUG/FEATURE IS TREATED IN digitalRead(channel,index)
+    return digitalRead(channel,0);
 }
 
 void digitalWrite(uint8_t channel, uint8_t  value) {
-     _digitalWrite(channel,1,value);
+	// CHANNEL 5 OFFSET BUG/FEATURE IS TREATED IN digitalWrite( channel,  pin,  value)
+     digitalWrite(channel,1,value);
 }
 
 int analogRead(uint8_t channel) {
+	if (channel == 5) channel++;
     Wire.beginTransmission(_iic_addr);
     Wire.write( ((channel+4)<<4) | 0x06);
     Wire.endTransmission();
@@ -77,6 +84,7 @@ int analogRead(uint8_t channel) {
 
 
 void analogWrite(uint8_t channel, uint8_t pin, uint8_t  pwm) {
+	if (channel == 5) channel++;
     Wire.beginTransmission(_iic_addr);
     Wire.write(((channel+4)<<4) | (0x02+pin));
     Wire.write(pwm);
@@ -85,6 +93,7 @@ void analogWrite(uint8_t channel, uint8_t pin, uint8_t  pwm) {
 
 
 void setPixelCount(uint8_t channel, uint16_t count) {
+	if (channel == 5) channel++;
     Wire.beginTransmission(_iic_addr);
     Wire.write(((channel+4)<<4) | 0x08);
     Wire.write(count & 0xff);
@@ -94,6 +103,7 @@ void setPixelCount(uint8_t channel, uint16_t count) {
 
 void setPixelColor(uint8_t channel, uint16_t index, uint8_t r,
                                    int8_t g, uint8_t b) {
+	if (channel == 5) channel++;									
     Wire.beginTransmission(_iic_addr);
     Wire.write(((channel+4)<<4) | 0x09);
     Wire.write(index & 0xff);
@@ -106,6 +116,7 @@ void setPixelColor(uint8_t channel, uint16_t index, uint8_t r,
 
 void fillPixelColor(uint8_t channel, uint16_t index, uint16_t count,
                                   uint8_t r, int8_t g, uint8_t b) {
+	if (channel == 5) channel++;									
     Wire.beginTransmission(_iic_addr);
     Wire.write(((channel+4)<<4) | 0x0a);
     Wire.write(index & 0xff);
@@ -121,6 +132,7 @@ void fillPixelColor(uint8_t channel, uint16_t index, uint16_t count,
 }
 
 void setPixelBrightness(uint8_t channel, uint8_t brightness) {
+	if (channel == 5) channel++;
     Wire.beginTransmission(_iic_addr);
     Wire.write(((channel+4)<<4) | 0x0b);
     Wire.write(brightness);

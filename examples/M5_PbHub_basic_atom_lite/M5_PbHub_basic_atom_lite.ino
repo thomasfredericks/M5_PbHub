@@ -11,7 +11,7 @@ M5_PbHub myPbHub;
 #define ANGLE_UNIT_CHANNEL 0
 #define LIGHT_UNIT_CHANNEL 1
 #define MOTION_UNIT_CHANNEL 2
-#define KEY_UNIT_CHANNEL 3
+#define KEY_UNIT_CHANNEL 5
 
 void setup() {
   M5.begin(false, false, false); // Démarrer la libraire M5 avec toutes les options désactivées

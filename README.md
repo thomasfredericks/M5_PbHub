@@ -2,9 +2,9 @@
 
 Simple library for the [M5Stack PbHUB v1.1](https://docs.m5stack.com/en/unit/pbhub_1.1).
 
-![PbHub back](pbhub_back.jpg)
+![PbHub back](extras/pbhub_back.jpg)
 
-![PbHub connected to KEY, LIGHT, PIR and ANGLE units](pbhub_connected.jpg)
+![PbHub connected to KEY, LIGHT, PIR and ANGLE units](extras/pbhub_connected.jpg)
 
 ## Usage
 
