@@ -5,50 +5,46 @@
 #include <Wire.h>
 
 
-
 class M5_PbHub {
 
   private:
     uint8_t _iic_addr = 0x61;
-
-
-
-
+    TwoWire & _wire;
 
   public:
-M5_PbHub() {
+M5_PbHub(TwoWire & wire) : _wire(wire) {
 }
 
-M5_PbHub(uint8_t iic_addr) {
+M5_PbHub(TwoWire & wire, uint8_t iic_addr) : _wire(wire) {
     _iic_addr = iic_addr;
 }
 
 void begin() {
-    // Wire should be started before
-    // Wire.begin();
+    // _wire should be started before
+    // _wire.begin();
 }
 
 int digitalRead(uint8_t channel, uint8_t pin) {
 	if (channel == 5) channel++;
-	Wire.beginTransmission(_iic_addr);
-	Wire.write(((channel+4)<<4) | (0x04+pin));
-	Wire.endTransmission();
+	_wire.beginTransmission(_iic_addr);
+	_wire.write(((channel+4)<<4) | (0x04+pin));
+	_wire.endTransmission();
 
 	uint8_t RegValue = 0;
 
-	Wire.requestFrom(_iic_addr, (uint8_t)1);
-	while (Wire.available()) {
-		RegValue = Wire.read();
+	_wire.requestFrom(_iic_addr, (uint8_t)1);
+	while (_wire.available()) {
+		RegValue = _wire.read();
 	}
 	return RegValue;
 }
 
 void digitalWrite(uint8_t channel, uint8_t pin, uint8_t value) {
 	if (channel == 5) channel++;
-	Wire.beginTransmission(_iic_addr);
-	Wire.write(((channel+4)<<4) | (0x00+pin));
-	Wire.write(value);
-	Wire.endTransmission();
+	_wire.beginTransmission(_iic_addr);
+	_wire.write(((channel+4)<<4) | (0x00+pin));
+	_wire.write(value);
+	_wire.endTransmission();
 }
 
 int digitalRead(uint8_t channel) {
@@ -63,19 +59,19 @@ void digitalWrite(uint8_t channel, uint8_t  value) {
 
 int analogRead(uint8_t channel) {
 	if (channel == 5) channel++;
-    Wire.beginTransmission(_iic_addr);
-    Wire.write( ((channel+4)<<4) | 0x06);
-    Wire.endTransmission();
+    _wire.beginTransmission(_iic_addr);
+    _wire.write( ((channel+4)<<4) | 0x06);
+    _wire.endTransmission();
 
     uint8_t RegValue_L = 0;
     uint8_t RegValue_H = 0;
 
-    Wire.requestFrom((uint16_t)_iic_addr,(size_t) 2);
+    _wire.requestFrom((uint16_t)_iic_addr,(size_t) 2);
     unsigned long millisAtRequest = millis();
-    while (Wire.available() < 1 && millis() - millisAtRequest < 500 ) { };
-    if ( Wire.available() > 1) {
-        RegValue_L = Wire.read();
-        RegValue_H = Wire.read();
+    while (_wire.available() < 1 && millis() - millisAtRequest < 500 ) { };
+    if ( _wire.available() > 1) {
+        RegValue_L = _wire.read();
+        RegValue_H = _wire.read();
     }
 
     return (RegValue_H << 8) | RegValue_L;
@@ -85,58 +81,58 @@ int analogRead(uint8_t channel) {
 
 void analogWrite(uint8_t channel, uint8_t pin, uint8_t  pwm) {
 	if (channel == 5) channel++;
-    Wire.beginTransmission(_iic_addr);
-    Wire.write(((channel+4)<<4) | (0x02+pin));
-    Wire.write(pwm);
-    Wire.endTransmission();
+    _wire.beginTransmission(_iic_addr);
+    _wire.write(((channel+4)<<4) | (0x02+pin));
+    _wire.write(pwm);
+    _wire.endTransmission();
 }
 
 
 void setPixelCount(uint8_t channel, uint16_t count) {
 	if (channel == 5) channel++;
-    Wire.beginTransmission(_iic_addr);
-    Wire.write(((channel+4)<<4) | 0x08);
-    Wire.write(count & 0xff);
-    Wire.write(count >> 8);
-    Wire.endTransmission();
+    _wire.beginTransmission(_iic_addr);
+    _wire.write(((channel+4)<<4) | 0x08);
+    _wire.write(count & 0xff);
+    _wire.write(count >> 8);
+    _wire.endTransmission();
 }
 
 void setPixelColor(uint8_t channel, uint16_t index, uint8_t r,
                                    int8_t g, uint8_t b) {
 	if (channel == 5) channel++;									
-    Wire.beginTransmission(_iic_addr);
-    Wire.write(((channel+4)<<4) | 0x09);
-    Wire.write(index & 0xff);
-    Wire.write(index >> 8);
-    Wire.write(r);
-    Wire.write(g);
-    Wire.write(b);
-    Wire.endTransmission();
+    _wire.beginTransmission(_iic_addr);
+    _wire.write(((channel+4)<<4) | 0x09);
+    _wire.write(index & 0xff);
+    _wire.write(index >> 8);
+    _wire.write(r);
+    _wire.write(g);
+    _wire.write(b);
+    _wire.endTransmission();
 }
 
 void fillPixelColor(uint8_t channel, uint16_t index, uint16_t count,
                                   uint8_t r, int8_t g, uint8_t b) {
 	if (channel == 5) channel++;									
-    Wire.beginTransmission(_iic_addr);
-    Wire.write(((channel+4)<<4) | 0x0a);
-    Wire.write(index & 0xff);
-    Wire.write(index >> 8);
+    _wire.beginTransmission(_iic_addr);
+    _wire.write(((channel+4)<<4) | 0x0a);
+    _wire.write(index & 0xff);
+    _wire.write(index >> 8);
 
-    Wire.write(count & 0xff);
-    Wire.write(count >> 8);
+    _wire.write(count & 0xff);
+    _wire.write(count >> 8);
 
-    Wire.write(r);
-    Wire.write(g);
-    Wire.write(b);
-    Wire.endTransmission();
+    _wire.write(r);
+    _wire.write(g);
+    _wire.write(b);
+    _wire.endTransmission();
 }
 
 void setPixelBrightness(uint8_t channel, uint8_t brightness) {
 	if (channel == 5) channel++;
-    Wire.beginTransmission(_iic_addr);
-    Wire.write(((channel+4)<<4) | 0x0b);
-    Wire.write(brightness);
-    Wire.endTransmission();
+    _wire.beginTransmission(_iic_addr);
+    _wire.write(((channel+4)<<4) | 0x0b);
+    _wire.write(brightness);
+    _wire.endTransmission();
 }
 
 
