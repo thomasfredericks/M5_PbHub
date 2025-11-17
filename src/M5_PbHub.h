@@ -12,10 +12,9 @@ class M5_PbHub {
     TwoWire & _wire;
 
   public:
-M5_PbHub(TwoWire & wire) : _wire(wire) {
-}
+  
 
-M5_PbHub(TwoWire & wire, uint8_t iic_addr) : _wire(wire) {
+M5_PbHub(TwoWire & wire = Wire, uint8_t iic_addr = 0x61) : _wire(wire) {
     _iic_addr = iic_addr;
 }
 
